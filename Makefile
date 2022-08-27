@@ -6,7 +6,7 @@
 #    By: ccharrie <ccharrie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/10 12:16:23 by ccharrie          #+#    #+#              #
-#    Updated: 2019/05/10 20:13:35 by ccharrie         ###   ########.fr        #
+#    Updated: 2022/08/27 05:17:03 by ccharrie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ NAME = fdf
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-MLX_FLAGS = -I /usr/X11/include -g -L /usr/X11/lib -lmlx -framework OpenGL -framework AppKit
+MLX_FLAGS = -framework OpenGL -framework AppKit
 
 HEADER_PATH = includes
 
@@ -55,6 +55,10 @@ LIBFT_PATH = libft
 LIBFT_INCLUDE = -I$(LIBFT_PATH)
 LIBFT = -L$(LIBFT_PATH) -lft
 
+MLX_PATH = minilibx_macos
+MLX_INCLUDE = -I$(MLX_PATH)
+MLX = -L$(MLX_PATH) -lmlx
+
 LIBFTPRINTF_PATH = libft/ft_printf
 LIBFTPRINTF_INCLUDE = -I$(LIBFTPRINTF_PATH)/includes
 LIBFTPRINTF = -L$(LIBFTPRINTF_PATH) -lftprintf
@@ -62,12 +66,12 @@ LIBFTPRINTF = -L$(LIBFTPRINTF_PATH) -lftprintf
 all: compile
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
-	$(CC) -c -o $@ $(CFLAGS) $< $(LIBFT_INCLUDE) $(LIBFTPRINTF_INCLUDE) -I$(HEADER_PATH)
+	$(CC) -c -o $@ $(CFLAGS) $< $(MLX_INCLUDE) $(LIBFT_INCLUDE) $(LIBFTPRINTF_INCLUDE) -I$(HEADER_PATH)
 
 $(NAME): $(OBJ)
 	@echo $(COLOR_YELLOW)"Linking "$@"..."$(COLOR_RESET)
 	@echo $(COLOR_GRAY)
-	$(CC) $^ $(MLX_FLAGS) $(LIBFTPRINTF) $(LIBFT) -o $@
+	$(CC) $^ $(MLX) $(MLX_FLAGS) $(LIBFTPRINTF) $(LIBFT) -o $@
 	@echo $(COLOR_RESET)
 	@echo $(COLOR_GREEN)$(NAME)" successfully created."$(COLOR_RESET)
 
@@ -80,6 +84,11 @@ compile: $(OBJ_PATH)
 	@make -C $(LIBFT_PATH)
 	@echo $(COLOR_RESET)
 	@echo $(COLOR_BLUE)"==Exiting "$(LIBFTPRINTF_PATH)"=="$(COLOR_RESET)
+	@echo $(COLOR_BLUE)"==Entering "$(MLX_PATH)"=="$(COLOR_RESET)
+	@echo $(COLOR_GRAY)
+	@make -C $(MLX_PATH)
+	@echo $(COLOR_RESET)
+	@echo $(COLOR_BLUE)"==Exiting "$(MLX_PATH)"=="$(COLOR_RESET)
 	@echo $(COLOR_BLUE)"==Entering "$(LIBFTPRINTF_PATH)"=="$(COLOR_RESET)
 	@echo $(COLOR_GRAY)
 	@make -C $(LIBFTPRINTF_PATH)
@@ -96,6 +105,9 @@ clean:
 	@echo  $(COLOR_BLUE)"==Entering "$(LIBFT_PATH)"=="$(COLOR_RESET)
 	@make -C $(LIBFT_PATH) clean
 	@echo  $(COLOR_BLUE)"==Exiting "$(LIBFT_PATH)"=="$(COLOR_RESET)
+	@echo  $(COLOR_BLUE)"==Entering "$(MLX_PATH)"=="$(COLOR_RESET)
+	@make -C $(MLX_PATH) clean
+	@echo  $(COLOR_BLUE)"==Exiting "$(MLX_PATH)"=="$(COLOR_RESET)
 	@echo  $(COLOR_BLUE)"==Entering "$(LIBFTPRINTF_PATH)"=="$(COLOR_RESET)
 	@make -C $(LIBFTPRINTF_PATH) clean
 	@echo  $(COLOR_BLUE)"==Exiting "$(LIBFTPRINTF_PATH)"=="$(COLOR_RESET)
@@ -106,6 +118,9 @@ fclean: clean
 	@echo  $(COLOR_BLUE)"==Entering "$(LIBFT_PATH)"=="$(COLOR_RESET)
 	@make -C $(LIBFT_PATH) fclean
 	@echo  $(COLOR_BLUE)"==Exiting "$(LIBFT_PATH)"=="$(COLOR_RESET)
+	@echo  $(COLOR_BLUE)"==Entering "$(MLX_PATH)"=="$(COLOR_RESET)
+	@make -C $(MLX_PATH) fclean
+	@echo  $(COLOR_BLUE)"==Exiting "$(MLX_PATH)"=="$(COLOR_RESET)
 	@echo  $(COLOR_BLUE)"==Entering "$(LIBFTPRINTF_PATH)"=="$(COLOR_RESET)
 	@make -C $(LIBFTPRINTF_PATH) fclean
 	@echo  $(COLOR_ORANGE)"==Exiting "$(LIBFTPRINTF_PATH)"=="$(COLOR_RESET)
